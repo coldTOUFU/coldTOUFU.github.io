@@ -913,31 +913,22 @@
   </div>
 
   <h2>授業名とリンクの入力</h2>
-
+  <button type="button" onclick="shapeTimesheet()">時間割の構造設定を反映</button>
+  <table border="1" name="timesheet">
+  </table>
 </body>
 <footer>
 <a href="./index.html">ホーム</a>
 </footer>
 <script type="text/javascript">
-  yobis = [{ "月": true },
-           { "火": true },
-           { "水": true },
-           { "木": true },
-           { "金": true },
-           { "土": false },
-           { "日": false }]
+  function removeChildren(node) {
+    if(node.children == null) { return; }
 
-  timeTables = new Array(10)
-
-  function Item() {
-    this.text = "";
-    this.isLink = false;
-    this.href = "";
+    Array.from(node.children).forEach(function(c) { c.remove(); });
   }
 
-  function Class() {
-    this.name = "";
-    this.items = [new Item(), new Item, new Item];
+  function filterChecked(nodes) {
+    return Array.from(nodes).filter(n => n.checked);
   }
 
   function timeTableClicked(n) {
@@ -947,12 +938,33 @@
       for(i = 0; i < n; i++) {
         document.getElementsByName("timeTable")[i].checked = true;
         document.getElementsByName("timeRange")[i].hidden = false;
-
       }
     } else {
       for(i = n-1; i < 10; i++) {
         document.getElementsByName("timeTable")[i].checked = false;
         document.getElementsByName("timeRange")[i].hidden = true;
+      }
+    }
+  }
+
+  function shapeTimesheet() {
+    timesheet = document.getElementsByName("timesheet")[0];
+    removeChildren(timesheet);
+
+    yobiLength = filterChecked(document.getElementsByName("yobi")).length;
+    timeTableLength = filterChecked(document.getElementsByName("timeTable")).length;
+
+    trHeader = timesheet.insertRow(-1);
+    trHeader.insertCell(-1);
+    for(i = 0; i < yobiLength; i++) {
+      th = trHeader.insertCell(-1);
+    }
+
+    for(i = 0; i < timeTableLength; i++) {
+      tr = timesheet.insertRow(-1);
+      tr.insertCell(-1);
+      for(j = 0; j < yobiLength; j++) {
+        td = tr.insertCell(-1);
       }
     }
   }
