@@ -10,23 +10,23 @@
   <p>授業形態_授業ページリンク1_授業ページリンク2</p>
 
   <h2>曜日</h2>
-  <input type="checkbox" name="yobi" value="月">月
+  <input type="checkbox" name="yobi" value="月" checked>月
   <br>
-  <input type="checkbox" name="yobi" value="火">火
+  <input type="checkbox" name="yobi" value="火" checked>火
   <br>
-  <input type="checkbox" name="yobi" value="水">水
+  <input type="checkbox" name="yobi" value="水" checked>水
   <br>
-  <input type="checkbox" name="yobi" value="木">木
+  <input type="checkbox" name="yobi" value="木" checked>木
   <br>
-  <input type="checkbox" name="yobi" value="金">金
+  <input type="checkbox" name="yobi" value="金" checked>金
   <br>
   <input type="checkbox" name="yobi" value="土">土
   <br>
   <input type="checkbox" name="yobi" value="日">日
 
   <h2>時間割</h2>
-  <input type="checkbox" name="jigen" value="1">1
-  <span align=center>
+  <input type="checkbox" name="timeTable" value="1" onclick="timeTableClicked(1)" checked>1
+  <span name='timeRange'>
     <select name="hourRangeSt1">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -37,7 +37,7 @@
       <option value="06">06</option>
       <option value="07">07</option>
       <option value="08">08</option>
-      <option value="09">09</option>
+      <option value="09" selected>09</option>
       <option value="10">10</option>
       <option value="11">11</option>
       <option value="12">12</option>
@@ -55,7 +55,7 @@
     </select>
     :
     <select name="minuteRangeSt1">
-      <option value="00">00</option>
+      <option value="00" selected>00</option>
       <option value="05">05</option>
       <option value="10">10</option>
       <option value="15">15</option>
@@ -80,7 +80,7 @@
       <option value="07">07</option>
       <option value="08">08</option>
       <option value="09">09</option>
-      <option value="10">10</option>
+      <option value="10" selected>10</option>
       <option value="11">11</option>
       <option value="12">12</option>
       <option value="13">13</option>
@@ -103,7 +103,7 @@
       <option value="15">15</option>
       <option value="20">20</option>
       <option value="25">25</option>
-      <option value="30">30</option>
+      <option value="30" selected>30</option>
       <option value="35">35</option>
       <option value="40">40</option>
       <option value="45">45</option>
@@ -112,8 +112,8 @@
     </select>
   </span>
   <br>
-  <input type="checkbox" name="jigen" value="2">2
-  <span>
+  <input type="checkbox" name="timeTable" value="2" onclick="timeTableClicked(2)" checked>2
+  <span name='timeRange'>
     <select name="hourRangeSt2">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -125,7 +125,7 @@
       <option value="07">07</option>
       <option value="08">08</option>
       <option value="09">09</option>
-      <option value="10">10</option>
+      <option value="10" selected>10</option>
       <option value="11">11</option>
       <option value="12">12</option>
       <option value="13">13</option>
@@ -150,7 +150,7 @@
       <option value="25">25</option>
       <option value="30">30</option>
       <option value="35">35</option>
-      <option value="40">40</option>
+      <option value="40" selected>40</option>
       <option value="45">45</option>
       <option value="50">50</option>
       <option value="55">55</option>
@@ -169,7 +169,7 @@
       <option value="09">09</option>
       <option value="10">10</option>
       <option value="11">11</option>
-      <option value="12">12</option>
+      <option value="12" selected>12</option>
       <option value="13">13</option>
       <option value="14">14</option>
       <option value="15">15</option>
@@ -186,7 +186,7 @@
     <select name="minuteRangeEn2">
       <option value="00">00</option>
       <option value="05">05</option>
-      <option value="10">10</option>
+      <option value="10" selected>10</option>
       <option value="15">15</option>
       <option value="20">20</option>
       <option value="25">25</option>
@@ -199,8 +199,8 @@
     </select>
   </span>
   <br>
-  <input type="checkbox" name="jigen" value="3">3
-  <span>
+  <input type="checkbox" name="timeTable" value="3" onclick="timeTableClicked(3)" checked>3
+  <span name='timeRange'>
     <select name="hourRangeSt3">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -215,7 +215,7 @@
       <option value="10">10</option>
       <option value="11">11</option>
       <option value="12">12</option>
-      <option value="13">13</option>
+      <option value="13" selected>13</option>
       <option value="14">14</option>
       <option value="15">15</option>
       <option value="16">16</option>
@@ -229,7 +229,7 @@
     </select>
     :
     <select name="minuteRangeSt3">
-      <option value="00">00</option>
+      <option value="00" selected>00</option>
       <option value="05">05</option>
       <option value="10">10</option>
       <option value="15">15</option>
@@ -258,7 +258,7 @@
       <option value="11">11</option>
       <option value="12">12</option>
       <option value="13">13</option>
-      <option value="14">14</option>
+      <option value="14" selected>14</option>
       <option value="15">15</option>
       <option value="16">16</option>
       <option value="17">17</option>
@@ -277,7 +277,7 @@
       <option value="15">15</option>
       <option value="20">20</option>
       <option value="25">25</option>
-      <option value="30">30</option>
+      <option value="30" selected>30</option>
       <option value="35">35</option>
       <option value="40">40</option>
       <option value="45">45</option>
@@ -286,8 +286,8 @@
     </select>
   </span>
   <br>
-  <input type="checkbox" name="jigen" value="4">4
-  <span>
+  <input type="checkbox" name="timeTable" value="4" onclick="timeTableClicked(4)" checked>4
+  <span name='timeRange'>
     <select name="hourRangeSt4">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -303,7 +303,7 @@
       <option value="11">11</option>
       <option value="12">12</option>
       <option value="13">13</option>
-      <option value="14">14</option>
+      <option value="14" selected>14</option>
       <option value="15">15</option>
       <option value="16">16</option>
       <option value="17">17</option>
@@ -324,7 +324,7 @@
       <option value="25">25</option>
       <option value="30">30</option>
       <option value="35">35</option>
-      <option value="40">40</option>
+      <option value="40" selected>40</option>
       <option value="45">45</option>
       <option value="50">50</option>
       <option value="55">55</option>
@@ -347,7 +347,7 @@
       <option value="13">13</option>
       <option value="14">14</option>
       <option value="15">15</option>
-      <option value="16">16</option>
+      <option value="16" selected>16</option>
       <option value="17">17</option>
       <option value="18">18</option>
       <option value="19">19</option>
@@ -360,7 +360,7 @@
     <select name="minuteRangeEn4">
       <option value="00">00</option>
       <option value="05">05</option>
-      <option value="10">10</option>
+      <option value="10" selected>10</option>
       <option value="15">15</option>
       <option value="20">20</option>
       <option value="25">25</option>
@@ -373,8 +373,8 @@
     </select>
   </span>
   <br>
-  <input type="checkbox" name="jigen" value="5">5
-  <span>
+  <input type="checkbox" name="timeTable" value="5" onclick="timeTableClicked(5)" checked>5
+  <span name='timeRange'>
     <select name="hourRangeSt5">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -392,7 +392,7 @@
       <option value="13">13</option>
       <option value="14">14</option>
       <option value="15">15</option>
-      <option value="16">16</option>
+      <option value="16" selected>16</option>
       <option value="17">17</option>
       <option value="18">18</option>
       <option value="19">19</option>
@@ -406,7 +406,7 @@
       <option value="00">00</option>
       <option value="05">05</option>
       <option value="10">10</option>
-      <option value="15">15</option>
+      <option value="15" selected>15</option>
       <option value="20">20</option>
       <option value="25">25</option>
       <option value="30">30</option>
@@ -434,7 +434,7 @@
       <option value="13">13</option>
       <option value="14">14</option>
       <option value="15">15</option>
-      <option value="16">16</option>
+      <option value="16" selected>16</option>
       <option value="17">17</option>
       <option value="18">18</option>
       <option value="19">19</option>
@@ -454,14 +454,14 @@
       <option value="30">30</option>
       <option value="35">35</option>
       <option value="40">40</option>
-      <option value="45">45</option>
+      <option value="45" selected>45</option>
       <option value="50">50</option>
       <option value="55">55</option>
     </select>
   </span>
   <br>
-  <input type="checkbox" name="jigen" value="6">6
-  <span>
+  <input type="checkbox" name="timeTable" value="6" onclick="timeTableClicked(6)">6
+  <span name='timeRange' hidden>
     <select name="hourRangeSt6">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -547,8 +547,8 @@
     </select>
   </span>
   <br>
-  <input type="checkbox" name="jigen" value="7">7
-  <span>
+  <input type="checkbox" name="timeTable" value="7" onclick="timeTableClicked(7)">7
+  <span name='timeRange' hidden>
     <select name="hourRangeSt7">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -634,8 +634,8 @@
     </select>
   </span>
   <br>
-  <input type="checkbox" name="jigen" value="8">8
-  <span>
+  <input type="checkbox" name="timeTable" value="8" onclick="timeTableClicked(8)">8
+  <span name='timeRange' hidden>
     <select name="hourRangeSt8">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -721,8 +721,8 @@
     </select>
   </span>
   <br>
-  <input type="checkbox" name="jigen" value="9">9
-  <span>
+  <input type="checkbox" name="timeTable" value="9" onclick="timeTableClicked(9)">9
+  <span name='timeRange' hidden>
     <select name="hourRangeSt9">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -808,8 +808,8 @@
     </select>
   </span>
   <br>
-  <input type="checkbox" name="jigen" value="10">10
-  <span>
+  <input type="checkbox" name="timeTable" value="10" onclick="timeTableClicked(10)">10
+  <span name='timeRange' hidden>
     <select name="hourRangeSt10">
       <option value="00">00</option>
       <option value="01">01</option>
@@ -913,9 +913,48 @@
   </div>
 
   <h2>授業名とリンクの入力</h2>
-  
+
 </body>
 <footer>
 <a href="./index.html">ホーム</a>
 </footer>
+<script type="text/javascript">
+  yobis = [{ "月": true },
+           { "火": true },
+           { "水": true },
+           { "木": true },
+           { "金": true },
+           { "土": false },
+           { "日": false }]
+
+  timeTables = new Array(10)
+
+  function Item() {
+    this.text = "";
+    this.isLink = false;
+    this.href = "";
+  }
+
+  function Class() {
+    this.name = "";
+    this.items = [new Item(), new Item, new Item];
+  }
+
+  function timeTableClicked(n) {
+    clickedElem = document.getElementsByName("timeRange")[n-1];
+
+    if(clickedElem.hidden) {
+      for(i = 0; i < n; i++) {
+        document.getElementsByName("timeTable")[i].checked = true;
+        document.getElementsByName("timeRange")[i].hidden = false;
+
+      }
+    } else {
+      for(i = n-1; i < 10; i++) {
+        document.getElementsByName("timeTable")[i].checked = false;
+        document.getElementsByName("timeRange")[i].hidden = true;
+      }
+    }
+  }
+</script>
 </html>
