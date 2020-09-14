@@ -997,10 +997,26 @@
       /* 各科目 */
       yobiChecked.forEach(function(y) {
         td = document.createElement('td');
+        td.innerHTML = classFieldHTML();
         tr.appendChild(td);
       });
       timesheet.appendChild(tr);
     });
+  }
+
+  function classFieldHTML() {
+    classNameForm = "<input type='text' placeholder='授業名'>";
+    fieldItems = "";
+    for(i = 0; i < 3; i++) {
+      fieldItems += "<br>"
+      node = document.getElementsByName("fieldItem")[i]
+      if(node.querySelector("[type=checkbox]").checked) {
+        fieldItems += "<input type='text' placeholder='" + node.querySelector("[type='text']").value + "のリンクURL'>"
+      } else {
+        fieldItems += "<input type='text' placeholder='表示する文字'>"
+      }
+    }
+    return classNameForm + fieldItems;
   }
 </script>
 </html>
