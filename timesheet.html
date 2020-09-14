@@ -916,6 +916,10 @@
   <button type="button" onclick="shapeTimesheet()">時間割の構造設定を反映</button>
   <table border="1" name="timesheet">
   </table>
+
+  <h2>出力</h2>
+  <button type="button" onClick="outputJSON()">JSONで出力</button>
+  <input type="text" name="outputJSONForm">
 </body>
 <footer>
 <a href="./index.html">ホーム</a>
@@ -959,6 +963,15 @@
     }
   }
 
+  function timeRangeStr(node) {
+    hourSt = selectedOption(node.querySelector('[name=hourRangeSt]').children).value;
+    minSt = selectedOption(node.querySelector('[name=minuteRangeSt]').children).value;
+    hourEn = selectedOption(node.querySelector('[name=hourRangeEn]').children).value;
+    minEn = selectedOption(node.querySelector('[name=minuteRangeEn]').children).value;
+
+    return hourSt + ":" + minSt + "~" + hourEn + ":" + minEn;
+  }
+
   function timeRangeHTML(node) {
     hourSt = selectedOption(node.querySelector('[name=hourRangeSt]').children).value;
     minSt = selectedOption(node.querySelector('[name=minuteRangeSt]').children).value;
@@ -966,6 +979,21 @@
     minEn = selectedOption(node.querySelector('[name=minuteRangeEn]').children).value;
 
     return hourSt + ":" + minSt + "<br>" + hourEn + ":" + minEn;
+  }
+
+  function classFieldHTML(yobi, time) {
+    classNameForm = "<input type='text' name='fieldName' placeholder='授業名'>";
+    fieldItems = "";
+    for(i = 0; i < 3; i++) {
+      fieldItems += "<br>"
+      node = document.getElementsByName("fieldItem")[i]
+      if(node.querySelector("[type=checkbox]").checked) {
+        fieldItems += "<input type='text' name='fieldLink' id=node.querySelector('[type=text]').value placeholder='" + node.querySelector("[type='text']").value + "のリンクURL'>"
+      } else {
+        fieldItems += "<input type='text' name='fieldText' placeholder='表示する文字'>"
+      }
+    }
+    return "<div name='" + yobi + time + "'>" + classNameForm + fieldItems + "</div>";
   }
 
   function shapeTimesheet() {
@@ -997,26 +1025,56 @@
       /* 各科目 */
       yobiChecked.forEach(function(y) {
         td = document.createElement('td');
-        td.innerHTML = classFieldHTML();
+        td.innerHTML = classFieldHTML(y.value, t.value);
         tr.appendChild(td);
       });
       timesheet.appendChild(tr);
     });
   }
 
-  function classFieldHTML() {
-    classNameForm = "<input type='text' placeholder='授業名'>";
-    fieldItems = "";
-    for(i = 0; i < 3; i++) {
-      fieldItems += "<br>"
-      node = document.getElementsByName("fieldItem")[i]
-      if(node.querySelector("[type=checkbox]").checked) {
-        fieldItems += "<input type='text' placeholder='" + node.querySelector("[type='text']").value + "のリンクURL'>"
-      } else {
-        fieldItems += "<input type='text' placeholder='表示する文字'>"
-      }
+  function itemJSON(node) {
+    if(node.querySelector("[name=fieldLink]") === null) {// リンク無の場合．
+      return node.value;
     }
-    return classNameForm + fieldItems;
+
+    return { name: node.id, href: node.value };
+  }
+
+  function createJSONFromTimesheet() {
+    json = [];
+
+    yobiChecked = filterChecked(document.getElementsByName("yobi"));
+    timeTableChecked = filterChecked(document.getElementsByName("timeTable"));
+    yobiChecked.forEach(function(y) {
+      yobi = y.value;
+      yobiRow = [];
+
+      timeTableChecked.forEach(function(t) {
+        time = t.value;
+        range = timeRangeStr(t.nextElementSibling);
+        field = document.getElementsByName(yobi + time)[0]
+        name = field.querySelector("[name='fieldName']").value;
+        items = new Array(3);
+        for(i = 0; i < 3; i++) {
+          items[i] = itemJSON(field.children[(i+1)*2]);
+        }
+        yobiRow.push({
+          time: time,
+          range: range,
+          classData: {
+                       name: name,
+                       items: items
+                     }
+        })
+      })
+      json.push({ yobi: yobi, classes: yobiRow})
+    })
+
+    return json;
+  }
+
+  function outputJSON() {
+    document.getElementsByName("outputJSONForm")[0].value = JSON.stringify(createJSONFromTimesheet());
   }
 </script>
 </html>
