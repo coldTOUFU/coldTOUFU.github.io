@@ -10,6 +10,12 @@
   <p>シラバスリンク_授業ページリンク_教室</p>
   <p>授業形態_授業ページリンク1_授業ページリンク2</p> -->
 
+  <h2>以前のJSONデータを使う</h2>
+  <p>以前時間割を作成し、JSONを保存している場合は、それを下に貼ることで再利用できます．</p>
+  <p>JSONを貼ったのち、「授業名とリンクの入力」の「時間割の構造設定を反映」ボタンを押してください．</p>
+  <input type="text" name="pregeneratedJSON" placeholder="JSONを貼る">
+  <button type="button" onclick="reflectJSON()">設定を反映</button>
+
   <h2>曜日</h2>
   <p>時間割に含める曜日すべてにチェックを入れてください．</p>
   <input type="checkbox" name="yobi" value="月" checked>月
@@ -1117,7 +1123,7 @@
 
     for(i = 0; i < 3; i++) {
       node = targetField.querySelectorAll("[type=text]")[i+1];
-      if(node.name === "fieldText") {// リンク無の場合．
+      if(node.name === "fieldText" || node.value === '') {// リンク無の場合か、リンクのURLが空の場合．
         html += "<p>" + node.value + "</p>";
       } else {
         html += "<a href='" + node.value + "'>" + node.id + "</a><br>";
@@ -1163,6 +1169,47 @@
     newWindow.document.open();
     newWindow.document.write(createHTMLFromTimesheet());
     newWindow.document.close();
+  }
+
+  var yobiToIndex = { "月": 0, "火": 1, "水": 2, "木": 3, "金": 4, "土": 5, "日": 6 }
+
+  function reflectJSON() {
+    json = JSON.parse(document.getElementsByName("pregeneratedJSON")[0].value);
+
+    /* 曜日データを反映． */
+    json.forEach(function(yobiColumn) {
+      document.getElementsByName("yobi")[ yobiToIndex[yobiColumn["yobi"]] ].checked = true;
+    })
+
+    timeCount = 0; // 現在の時限のインデックス．
+    /* 時限データを反映． */
+    json[0]["classes"].forEach(function(classData) {
+      rangeText = classData["range"];
+      timeRangeNode = document.getElementsByName("timeRange")[timeCount];
+
+      rangeSt = rangeText.slice(0,4);
+      rangeEn = rangeText.slice(-5);
+      timeRangeNode.querySelectorAll("[name=hourRangeSt] option")[parseInt(rangeSt.slice(0,2))].selected = true;
+      timeRangeNode.querySelectorAll("[name=minuteRangeSt] option")[parseInt(rangeSt.slice(2,4))/5].selected = true;
+      timeRangeNode.querySelectorAll("[name=hourRangeEn] option")[parseInt(rangeEn.slice(0,2))].selected = true;
+      timeRangeNode.querySelectorAll("[name=minuteRangeEn] option")[parseInt(rangeEn.slice(2,4))/5].selected = true;
+
+      document.getElementsByName("timeTable")[timeCount].checked = true;
+      timeCount++;
+    })
+
+    json.forEach(function(yobiColumn) {
+      yobiColumn["classes"].forEach(function(classData) {
+        field = document.getElementsByName(yobiColumn["yobi"] + classData["time"]);
+        for(i = 0; i < 3; i++) {
+          if(typeof(classData["items"][i]) === "string") {// リンク無の場合．
+            field.querySelectorAll("[type='text']")[i+1].value = classData["items"][i];
+          } else {
+            field.querySelectorAll("[type='text']")[i+1].value = classData["items"][i]["href"];
+          }
+        }
+      })
+    })
   }
 </script>
 </html>
