@@ -5,11 +5,13 @@
   <h1>冷奴 の時間割ジェネレータ</h1>
 </head>
 <body>
-  <h2>テンプレート</h2>
+  <!-- 未実装 -->
+  <!-- <h2>テンプレート</h2>
   <p>シラバスリンク_授業ページリンク_教室</p>
-  <p>授業形態_授業ページリンク1_授業ページリンク2</p>
+  <p>授業形態_授業ページリンク1_授業ページリンク2</p> -->
 
   <h2>曜日</h2>
+  <p>時間割に含める曜日すべてにチェックを入れてください．</p>
   <input type="checkbox" name="yobi" value="月" checked>月
   <br>
   <input type="checkbox" name="yobi" value="火" checked>火
@@ -25,6 +27,7 @@
   <input type="checkbox" name="yobi" value="日">日
 
   <h2>時間割</h2>
+  <p>時間割の時限を10限まで選べます．選んだ時限に対して開講時間の範囲を入力してください．</p>
   <input type="checkbox" name="timeTable" value="1" onclick="timeTableClicked(1)" checked>1
   <span name='timeRange'>
     <select name="hourRangeSt">
@@ -896,6 +899,8 @@
   </span>
 
   <h2>フィールド設定</h2>
+  <p>時間割に付与する情報を決められます．</p>
+  <p>リンクを使いたい場合、「リンク有」にチェックを入れて「表示名」を入力することで、リンクのテキストを設定できます．</p>
   <div name="fieldItem">
     項目1
     <input type="checkbox" onClick="itemLinkChecked(1)">リンク有
@@ -913,13 +918,33 @@
   </div>
 
   <h2>授業名とリンクの入力</h2>
+  <p>曜日、時間割、フィールド設定の入力が終わったら、下の「時間割の構造設定を反映」ボタンを押してください．</p>
+  <p>その後、各授業の名前や項目の値を入力してください．</p>
   <button type="button" onclick="shapeTimesheet()">時間割の構造設定を反映</button>
   <table border="1" name="timesheet">
   </table>
 
-  <h2>出力</h2>
+  <h2> テキストとして出力</h2>
+  <p>各ボタンを押すと、対応する形式でフォームにデータが入ります．これをコピーして利用するなどしてください．</p>
   <button type="button" onClick="outputJSON()">JSONで出力</button>
   <input type="text" name="outputJSONForm">
+  <br>
+  <button type="button" onClick="outputHTML()">HTMLで出力</button>
+  <input type="text" name="outputHTMLForm">
+
+  <h2>新しいページで開く</h2>
+  <p>各ボタンを押すと、対応する形式のデータが新しいページとして開かれます．これを保存するなどして利用してください．</p>
+  <button type="button" onClick="openJSONPage()">JSONのページを開く</button>
+  <br>
+  <button type="button" onClick="openHTMLPage()">HTMLのページを開く</button>
+
+  <h2>実装予定の機能</h2>
+  <p>- 本ページで出力したJSONを入力することで、以前作成した時間割を復元、編集できる機能．</p>
+  <p>- 時間割HTMLに背景画像を設定できる機能．</p>
+  <p>- レイアウトやデザインの改善．</p>
+
+  <h3>バグ報告、御要望、御助言は以下のTwitterアカウントまでお願いします．</h3>
+  @coldTOUFU
 </body>
 <footer>
 <a href="./index.html">ホーム</a>
@@ -988,7 +1013,7 @@
       fieldItems += "<br>"
       node = document.getElementsByName("fieldItem")[i]
       if(node.querySelector("[type=checkbox]").checked) {
-        fieldItems += "<input type='text' name='fieldLink' id=node.querySelector('[type=text]').value placeholder='" + node.querySelector("[type='text']").value + "のリンクURL'>"
+        fieldItems += "<input type='text' name='fieldLink' id=" + node.querySelector('[type=text]').value + " placeholder='" + node.querySelector("[type='text']").value + "のリンクURL'>"
       } else {
         fieldItems += "<input type='text' name='fieldText' placeholder='表示する文字'>"
       }
@@ -1033,7 +1058,7 @@
   }
 
   function itemJSON(node) {
-    if(node.querySelector("[name=fieldLink]") === null) {// リンク無の場合．
+    if(node.name === null) {// リンク無の場合．
       return node.value;
     }
 
@@ -1075,6 +1100,69 @@
 
   function outputJSON() {
     document.getElementsByName("outputJSONForm")[0].value = JSON.stringify(createJSONFromTimesheet());
+  }
+
+  function openJSONPage() {
+    var newWindow = window.open();
+    newWindow.document.open();
+    newWindow.document.write(JSON.stringify(createJSONFromTimesheet()));
+    newWindow.document.close();
+  }
+
+  function classFieldOutputHTML(yobi, time) {
+    html = ""
+    targetField = document.getElementsByName(yobi+time)[0];
+
+    html += "<p>" + targetField.querySelector("[name=fieldName]").value + "</p>";
+
+    for(i = 0; i < 3; i++) {
+      node = targetField.querySelectorAll("[type=text]")[i+1];
+      if(node.name === "fieldText") {// リンク無の場合．
+        html += "<p>" + node.value + "</p>";
+      } else {
+        html += "<a href='" + node.value + "'>" + node.id + "</a><br>";
+      }
+    }
+
+    return html;
+  }
+
+  function createHTMLFromTimesheet() {
+    html = ""
+
+    yobiChecked = filterChecked(document.getElementsByName("yobi"));
+    timeTableChecked = filterChecked(document.getElementsByName("timeTable"));
+
+    /* ヘッダー(曜日の行) */
+    html += "<table border='1'>"
+    html += "<tr><th></th>" // 左端の空のフィールド、
+    yobiChecked.forEach(function(y) {
+      html += "<br><th>" + y.value + "</th>";
+    })
+    html += "</tr>"
+
+    /* 各行: 時限 + 各科目 */
+    timeTableChecked.forEach(function (t) {
+      html += "<tr>";
+      html += "<td>" + t.value + "<br>" + timeRangeHTML(t.nextElementSibling) + "</td>"
+      yobiChecked.forEach(function (y){
+        html += "<td>" + classFieldOutputHTML(y.value, t.value) + "</td>";
+      })
+      html += "</tr>"
+    })
+
+    return html;
+  }
+
+  function outputHTML() {
+    document.getElementsByName("outputHTMLForm")[0].value = createHTMLFromTimesheet();
+  }
+
+  function openHTMLPage() {
+    var newWindow = window.open();
+    newWindow.document.open();
+    newWindow.document.write(createHTMLFromTimesheet());
+    newWindow.document.close();
   }
 </script>
 </html>
