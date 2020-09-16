@@ -1175,6 +1175,7 @@
 
   function reflectJSON() {
     json = JSON.parse(document.getElementsByName("pregeneratedJSON")[0].value);
+    shapeTimesheet(); // 時間割表に値を入れるため、一旦時間割表を生成する．
 
     /* 曜日データを反映． */
     json.forEach(function(yobiColumn) {
@@ -1183,29 +1184,29 @@
 
     timeCount = 0; // 現在の時限のインデックス．
     /* 時限データを反映． */
-    json[0]["classes"].forEach(function(classData) {
-      rangeText = classData["range"];
+    json[0]["classes"].forEach(function(fieldData) {
+      rangeText = fieldData["range"];
       timeRangeNode = document.getElementsByName("timeRange")[timeCount];
 
-      rangeSt = rangeText.slice(0,4);
+      rangeSt = rangeText.slice(0,5);
       rangeEn = rangeText.slice(-5);
       timeRangeNode.querySelectorAll("[name=hourRangeSt] option")[parseInt(rangeSt.slice(0,2))].selected = true;
-      timeRangeNode.querySelectorAll("[name=minuteRangeSt] option")[parseInt(rangeSt.slice(2,4))/5].selected = true;
+      timeRangeNode.querySelectorAll("[name=minuteRangeSt] option")[parseInt(rangeSt.slice(3,5))/5].selected = true;
       timeRangeNode.querySelectorAll("[name=hourRangeEn] option")[parseInt(rangeEn.slice(0,2))].selected = true;
-      timeRangeNode.querySelectorAll("[name=minuteRangeEn] option")[parseInt(rangeEn.slice(2,4))/5].selected = true;
+      timeRangeNode.querySelectorAll("[name=minuteRangeEn] option")[parseInt(rangeEn.slice(3,5))/5].selected = true;
 
       document.getElementsByName("timeTable")[timeCount].checked = true;
       timeCount++;
     })
 
     json.forEach(function(yobiColumn) {
-      yobiColumn["classes"].forEach(function(classData) {
-        field = document.getElementsByName(yobiColumn["yobi"] + classData["time"]);
+      yobiColumn["classes"].forEach(function(fieldData) {
+        field = document.getElementsByName(yobiColumn["yobi"] + fieldData["time"])[0];
         for(i = 0; i < 3; i++) {
-          if(typeof(classData["items"][i]) === "string") {// リンク無の場合．
-            field.querySelectorAll("[type='text']")[i+1].value = classData["items"][i];
+          if(typeof(fieldData["classData"]["items"][i]) === "string") {// リンク無の場合．
+            field.querySelectorAll("[type='text']")[i+1].value = fieldData["classData"]["items"][i];
           } else {
-            field.querySelectorAll("[type='text']")[i+1].value = classData["items"][i]["href"];
+            field.querySelectorAll("[type='text']")[i+1].value = fieldData["classData"]["items"][i]["href"];
           }
         }
       })
