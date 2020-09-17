@@ -940,11 +940,13 @@
 
   <h2>新しいページで開く</h2>
   <p>各ボタンを押すと、対応する形式のデータが新しいページとして開かれます．これを保存するなどして利用してください．</p>
+  <p>現在開いたページを「名前を付けて保存」で保存できないため、「テキストとして出力」したものをメモ帳などに貼ってhtmlまたはjsonとして保存してください．</p>
   <button type="button" onClick="openJSONPage()">JSONのページを開く</button>
   <br>
   <button type="button" onClick="openHTMLPage()">HTMLのページを開く</button>
 
   <h2>実装予定の機能</h2>
+  <p>- 開いたページを「名前を付けて保存」できるようにする．</p>
   <p>- 時間割HTMLに背景画像を設定できる機能．</p>
   <p>- レイアウトやデザインの改善．</p>
 
@@ -1201,9 +1203,10 @@
     json.forEach(function(yobiColumn) {
       yobiColumn["classes"].forEach(function(fieldData) {
         field = document.getElementsByName(yobiColumn["yobi"] + fieldData["time"])[0];
+        field.querySelector("[name=fieldName]").value = fieldData["classData"]["name"];
         for(i = 0; i < 3; i++) {
           if(typeof(fieldData["classData"]["items"][i]) === "string") {// リンク無の場合．
-            field.querySelectorAll("[type='text']")[i+1].value = fieldData["classData"]["items"][i];
+            field.querySelectorAll("[type='text']")[i+1].value = fieldData["classData"]["items"][i]; // type='text'ならリンク有無関係なく拾える．
           } else {
             field.querySelectorAll("[type='text']")[i+1].value = fieldData["classData"]["items"][i]["href"];
           }
