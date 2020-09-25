@@ -12,7 +12,7 @@
 
   <h2>以前のJSONデータを使う</h2>
   <p>以前時間割を作成し、JSONを保存している場合は、それを下に貼ることで再利用できます．</p>
-  <p>JSONを貼ったのち、「授業名とリンクの入力」の「時間割の構造設定を反映」ボタンを押してください．</p>
+  <p>JSONを貼ったのち、「設定を反映」ボタンを押してください．</p>
   <input type="text" name="pregeneratedJSON" placeholder="JSONを貼る">
   <button type="button" onclick="reflectJSON()">設定を反映</button>
 
@@ -1065,7 +1065,7 @@
   }
 
   function itemJSON(node) {
-    if(node.name === null) {// リンク無の場合．
+    if(node.id === "") {// リンク無の場合．
       return node.value;
     }
 
@@ -1176,7 +1176,17 @@
 
   function reflectJSON() {
     json = JSON.parse(document.getElementsByName("pregeneratedJSON")[0].value);
-    shapeTimesheet(); // 時間割表に値を入れるため、一旦時間割表を生成する．
+
+    /* フィールドの各項目のリンク有無を反映． */
+    fieldItems = document.querySelectorAll('[name=fieldItem]');
+    linkCheckedArray = json[0]["classes"][0]["classData"]["items"];
+    for(i = 0; i < 3; i++) {
+      if(typeof(linkCheckedArray[i]) === "object") {
+        fieldItems[i].querySelector("[type=checkbox]").checked = true;
+        fieldItems[i].querySelector("[type=text]").value = linkCheckedArray[i]["name"];
+        itemLinkChecked(i+1);
+      }
+    }
 
     /* 曜日データを反映． */
     json.forEach(function(yobiColumn) {
@@ -1199,7 +1209,12 @@
       document.getElementsByName("timeTable")[timeCount].checked = true;
       timeCount++;
     })
+    timeTableClicked(timeCount + 1);
 
+    /* 時間割表の生成 */
+    shapeTimesheet();
+
+    /* 生成した時間割表の各フィールドに反映． */
     json.forEach(function(yobiColumn) {
       yobiColumn["classes"].forEach(function(fieldData) {
         field = document.getElementsByName(yobiColumn["yobi"] + fieldData["time"])[0];
