@@ -1141,7 +1141,7 @@
     timeTableChecked = filterChecked(document.getElementsByName("timeTable"));
 
     /* ヘッダー(曜日の行) */
-    html += "<table border='1'>"
+    html += "<html><table border='1'>"
     html += "<tr><th></th>" // 左端の空のフィールド、
     yobiChecked.forEach(function(y) {
       html += "<br><th>" + y.value + "</th>";
@@ -1158,6 +1158,7 @@
       html += "</tr>"
     })
 
+    html += "</table></html>"
     return html;
   }
 
@@ -1193,25 +1194,22 @@
       document.getElementsByName("yobi")[ yobiToIndex[yobiColumn["yobi"]] ].checked = true;
     })
 
-    timeCount = 0; // 現在の時限のインデックス．
-    /* 時限データを反映． */
-    json[0]["classes"].forEach(function(fieldData) {
-      rangeText = fieldData["range"];
-      timeRangeNode = document.getElementsByName("timeRange")[timeCount];
-
+    /* 時限データを反映: 各時限の時間帯を設定して、最後の時限に対しtimeTableClicked()を呼ぶ． */
+    for(i = 0; i < json[0]["classes"]; i++) {
+      rangeText = json[0]["classes"][i]["range"];
       rangeSt = rangeText.slice(0,5);
       rangeEn = rangeText.slice(-5);
+
+      /* ブラウザでの時間帯設定で行う処理を再現する． */
+      timeRangeNode = document.getElementsByName("timeRange")[i];
       timeRangeNode.querySelectorAll("[name=hourRangeSt] option")[parseInt(rangeSt.slice(0,2))].selected = true;
       timeRangeNode.querySelectorAll("[name=minuteRangeSt] option")[parseInt(rangeSt.slice(3,5))/5].selected = true;
       timeRangeNode.querySelectorAll("[name=hourRangeEn] option")[parseInt(rangeEn.slice(0,2))].selected = true;
       timeRangeNode.querySelectorAll("[name=minuteRangeEn] option")[parseInt(rangeEn.slice(3,5))/5].selected = true;
+      timeTableClicked(i);
+    }
 
-      document.getElementsByName("timeTable")[timeCount].checked = true;
-      timeCount++;
-    })
-    timeTableClicked(timeCount + 1);
-
-    /* 時間割表の生成 */
+    /* 空の時間割表の生成 */
     shapeTimesheet();
 
     /* 生成した時間割表の各フィールドに反映． */
