@@ -4,6 +4,15 @@ function removeChildren(node) {
   Array.from(node.children).forEach(function(c) { c.remove(); });
 }
 
+function saveStringAsFile(str, filename) {
+  download_link = document.getElementById('download_link');
+  blob = new Blob([str], {type: 'text/plain'});
+  download_link = document.createElement('a');
+  download_link.href = URL.createObjectURL(blob);
+  download_link.download = filename;
+  download_link.click();
+}
+
 function filterChecked(nodes) {
   return Array.from(nodes).filter(n => n.checked);
 }
@@ -61,7 +70,7 @@ function classFieldHTML(yobi, time) {
     fieldItems += "<br>"
     node = document.getElementsByName("fieldItem")[i]
     if(node.querySelector("[type=checkbox]").checked) {
-      fieldItems += "<input type='text' name='fieldLink' id=" + node.querySelector('[type=text]').value + " placeholder='" + node.querySelector("[type='text']").value + "のリンクURL'>"
+      fieldItems += "<input type='text' name='fieldLink' id='" + node.querySelector('[type=text]').value + "' placeholder='" + node.querySelector("[type='text']").value + "のリンクURL'>"
     } else {
       fieldItems += "<input type='text' name='fieldText' placeholder='表示する文字'>"
     }
@@ -146,6 +155,11 @@ function createJSONFromTimesheet() {
   return json;
 }
 
+function saveJSON() {
+  jsonStr = JSON.stringify(createJSONFromTimesheet());
+  saveStringAsFile(jsonStr, 'timesheet.json');
+}
+
 function outputJSON() {
   document.getElementsByName("outputJSONForm")[0].value = JSON.stringify(createJSONFromTimesheet());
 }
@@ -201,6 +215,11 @@ function createHTMLFromTimesheet() {
 
   html += "</table></html>"
   return html;
+}
+
+function saveHTML() {
+  htmlStr = createHTMLFromTimesheet();
+  saveStringAsFile(htmlStr, 'timesheet.html');
 }
 
 function outputHTML() {

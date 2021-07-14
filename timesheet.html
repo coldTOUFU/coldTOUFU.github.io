@@ -931,29 +931,27 @@
   <table border="1" name="timesheet">
   </table>
 
-  <h2> テキストとして出力</h2>
-  <p>各ボタンを押すと、対応する形式でフォームにデータが入ります．これをコピーして利用するなどしてください．</p>
-  <button type="button" onClick="outputJSON()">JSONで出力</button>
-  <input type="text" name="outputJSONForm">
+  <h2>ファイルを保存</h2>
+  <p>各ボタンを押すと、対応する形式で保存できます．</p>
+  <button type="button" onClick="saveJSON()">JSONで保存</button>
   <br>
-  <button type="button" onClick="outputHTML()">HTMLで出力</button>
-  <input type="text" name="outputHTMLForm">
+  <button type="button" onClick="saveHTML()">HTMLで保存</button>
 
   <h2>新しいページで開く</h2>
-  <p>各ボタンを押すと、対応する形式のデータが新しいページとして開かれます．これを保存するなどして利用してください．</p>
-  <p>現在開いたページを「名前を付けて保存」で保存できないため、「テキストとして出力」したものをメモ帳などに貼ってhtmlまたはjsonとして保存してください．</p>
+  <p>各ボタンを押すと、対応する形式のデータが新しいページで開かれます．</p>
   <button type="button" onClick="openJSONPage()">JSONのページを開く</button>
   <br>
   <button type="button" onClick="openHTMLPage()">HTMLのページを開く</button>
 
   <h2>実装予定の機能</h2>
-  <p>- 開いたページを「名前を付けて保存」できるようにする．</p>
   <p>- 時間割HTMLに背景画像を設定できる機能．</p>
   <p>- レイアウトやデザインの改善．</p>
 
   <h3>バグ報告、御要望、御助言は以下のTwitterアカウントまでお願いします．</h3>
   @coldTOUFU
   <h2>更新情報</h2>
+  <p>2021/07/14 「フィールド設定」でリンク有項目のURLを空にすると生成されるHTMLがバグる問題を修正．</p>
+  <p>2021/07/14 生成したHTMLやJSONを保存する機能を追加．</p>
   <p>2021/07/14 生成するHTMLの幅を揃えるよう修正．</p>
   <p>2021/07/14 時間割ジェネレータの更新情報をこのページに引っ越し．</p>
   <p>2020/10/05 JSONを読み込んだ際に時限が最大値より1多く設定される不具合を修正．</p>
