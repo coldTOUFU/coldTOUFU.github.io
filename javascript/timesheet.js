@@ -183,16 +183,16 @@ function createHTMLFromTimesheet() {
 
   /* ヘッダー(曜日の行) */
   html += "<html><table border='1'>"
-  html += "<tr><th></th>" // 左端の空のフィールド、
+  html += "<tr><th></th>" // 左上端の空のフィールド、
   yobiChecked.forEach(function(y) {
-    html += "<br><th>" + y.value + "</th>";
+    html += "<br><th width='175px'>" + y.value + "</th>";
   })
   html += "</tr>"
 
   /* 各行: 時限 + 各科目 */
   timeTableChecked.forEach(function (t) {
     html += "<tr>";
-    html += "<td>" + t.value + "<br>" + timeRangeHTML(t.nextElementSibling) + "</td>"
+    html += "<td height='120px'>" + t.value + "<br>" + timeRangeHTML(t.nextElementSibling) + "</td>"
     yobiChecked.forEach(function (y){
       html += "<td>" + classFieldOutputHTML(y.value, t.value) + "</td>";
     })
